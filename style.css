@@ -1,0 +1,11 @@
+#gameContainer{
+    text-align: center;
+
+}
+#gameBoard{
+    border: 25px solid;
+}
+#score{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 50px;
+}
