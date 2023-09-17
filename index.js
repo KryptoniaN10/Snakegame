@@ -19,8 +19,8 @@ let score=0;
 let snake=[
     {x:unitsize*3,y:0},
     {x:unitsize*2,y:0},
-    {x:unitsize*1,y:0},
-    {x:0,y:0}
+    {x:unitsize,y:0},
+    
 ]
 startGame()
 window.addEventListener("keydown",changeDirection)
@@ -40,12 +40,15 @@ function nextTick(){
         checkgameover()
         nextTick()
         }
-        ,100)
+        ,150)
     }
-    
+    else{
+        displayGameover()
+    }
 }
 function clearBoard(){
     ctx.fillStyle=backgroundcolor
+    ctx.fillRect(0,0,gameHeight,gameWidth)
 }
 function createFood(){
     function randomFood(min,max){
@@ -54,7 +57,7 @@ function createFood(){
     }
     foodX=randomFood(0,(gameWidth-unitsize))
     foodY=randomFood(0,(gameWidth-unitsize))
-    drawFood()
+    
 }   
 function drawFood(){
     ctx.fillStyle=foodColor;
@@ -63,18 +66,22 @@ function drawFood(){
 function moveSnake(){
     const head={x:snake[0].x+xVelocity,
     y:snake[0].y+yVelocity}
+    console.log("before pop"+snake)
+    
     
     if(snake[0].x===foodX && snake[0].y===foodY){
        score++
        scoreText.textContent=score
-       snake.unshift(head);
+       snake.unshift(head)
        createFood()
        drawFood()
     }
     else{
         snake.pop()
+        
         snake.unshift(head);
-    }
+        
+    }console.log("after pop"+snake)
 }
 function drawsnake(){
     ctx.fillStyle=snakeColor
@@ -85,7 +92,19 @@ function drawsnake(){
     })
 }
 function checkgameover(){
-    
+    if(snake[0].x<0 || snake[0].x>=gameWidth){
+        running=false
+    }
+    else if(snake[0].y>=gameHeight|| snake[0].y<0){
+        running=false
+    }
+    for (let i =1;i<snake.length;i++){
+       if( snake[i].x==snake[0].x && snake[i].y==snake[0].y ) {
+         running=false
+         break
+       } 
+ }
+      
 }
 function changeDirection(event){
       const keypressed=event.keyCode;
@@ -120,4 +139,24 @@ function changeDirection(event){
         
      }
 }
-function resetGame(){}
+function resetGame(){
+    snake=[
+        {x:unitsize*3,y:0},
+        {x:unitsize*2,y:0},
+        {x:unitsize,y:0},
+        
+    ]
+    score=0
+    xVelocity=unitsize
+    yVelocity=0
+    scoreText.textContent=0
+    startGame()
+}
+function displayGameover(){
+    ctx.font="50px MV Boli"
+    ctx.fillStyle="red"
+    ctx.strokeStyle="black"
+    ctx.textAlign="center"
+    ctx.fillText("Game Over!!!!!!!",gameHeight/2,gameWidth/2)
+    running=false
+}
