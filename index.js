@@ -63,14 +63,18 @@ function drawFood(){
 function moveSnake(){
     const head={x:snake[0].x+xVelocity,
     y:snake[0].y+yVelocity}
-    snake.unshift(head);
-    if(false){
-
+    
+    if(snake[0].x===foodX && snake[0].y===foodY){
+       score++
+       scoreText.textContent=score
+       snake.unshift(head);
+       createFood()
+       drawFood()
     }
     else{
         snake.pop()
+        snake.unshift(head);
     }
-    
 }
 function drawsnake(){
     ctx.fillStyle=snakeColor
